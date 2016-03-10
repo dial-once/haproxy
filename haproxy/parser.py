@@ -329,6 +329,10 @@ class EnvParser(object):
         return value
 
     @staticmethod
+    def parse_maxconn(value):
+        return value
+
+    @staticmethod
     def parse_tcp_ports(value):
         # '9000, 22/ssl' => ['9000', '22/ssl']
         if value:
