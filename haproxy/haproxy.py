@@ -566,14 +566,19 @@ class Haproxy(object):
                 backend.append("acl need_auth http_auth(haproxy_userlist)")
                 backend.append("http-request auth realm haproxy_basic_auth if !need_auth")
 
+            backend_maxconn = self._get_service_attr('maxconn', service_alias)
+
             for _service_alias, routes in self.specs.get_routes().iteritems():
                 if not service_alias or _service_alias == service_alias:
                     for route in routes:
                         # avoid adding those tcp routes adding http backends
                         if route in self.routes_added:
                             continue
+                        if backend_maxconn:
+                            backend_route = ["server %s %s:%s maxconn %s" % (route["container_name"], route["addr"], route["port"], backend_maxconn)]
+                        else:
+                            backend_route = ["server %s %s:%s" % (route["container_name"], route["addr"], route["port"])]
 
-                        backend_route = ["server %s %s:%s" % (route["container_name"], route["addr"], route["port"])]
                         if is_sticky:
                             backend_route.append("cookie %s" % route["container_name"])
 
