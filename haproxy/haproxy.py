@@ -467,8 +467,8 @@ class Haproxy(object):
                     frontends_dict[port].extend(acl_rule)
 
             for port, frontend in frontends_dict.iteritems():
+                frontend.append("maxconn %s" % Haproxy.envvar_maxconn)
                 cfg["frontend port_%s" % port] = frontend
-
         else:
             all_routes = []
             for routes in self.specs.get_routes().itervalues():
