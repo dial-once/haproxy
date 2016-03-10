@@ -275,6 +275,7 @@ class Haproxy(object):
                          "stats socket /var/run/haproxy.stats level admin"]
         cfg["defaults"] = ["balance %s" % cls.envvar_balance,
                            "log global",
+                           "maxconn %s" % cls.envvar_maxconn,
                            "mode %s" % cls.envvar_mode]
 
         bind = " ".join([cls.envvar_stats_port, cls.extra_bind_settings.get(cls.envvar_stats_port, "")])
