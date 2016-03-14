@@ -22,6 +22,7 @@ class Haproxy(object):
     envvar_default_ca_cert = os.getenv("CA_CERT")
     envvar_maxconn = os.getenv("MAXCONN", "4096")
     envvar_mode = os.getenv("MODE", "http")
+    envvar_nbproc = os.getenv("NBPROC", "1")
     envvar_option = os.getenv("OPTION", "redispatch, httplog, dontlognull, forwardfor").split(",")
     envvar_rsyslog_destination = os.getenv("RSYSLOG_DESTINATION", "127.0.0.1")
     envvar_ssl_bind_ciphers = os.getenv("SSL_BIND_CIPHERS")
@@ -272,10 +273,10 @@ class Haproxy(object):
                          "user haproxy",
                          "group haproxy",
                          "daemon",
+                         "nbproc %s" % cls.envvar_nbproc,
                          "stats socket /var/run/haproxy.stats level admin"]
         cfg["defaults"] = ["balance %s" % cls.envvar_balance,
                            "log global",
-                           "maxconn %s" % cls.envvar_maxconn,
                            "mode %s" % cls.envvar_mode]
 
         bind = " ".join([cls.envvar_stats_port, cls.extra_bind_settings.get(cls.envvar_stats_port, "")])
