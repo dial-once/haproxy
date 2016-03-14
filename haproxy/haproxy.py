@@ -511,11 +511,13 @@ class Haproxy(object):
         for service_alias in services_aliases:
             backend = []
             is_sticky = False
+            is_ws = False
 
             # Add http-service-close option for websocket backend
             for v in self.specs.get_vhosts():
                 if service_alias == v["service_alias"]:
                     if v["scheme"].lower() in ["ws", "wss"]:
+                        is_ws = True
                         backend.append("option http-server-close")
                         break
 
@@ -533,6 +535,9 @@ class Haproxy(object):
             cookie = self._get_service_attr("cookie", service_alias)
             if cookie:
                 backend.append("cookie %s" % cookie)
+                is_sticky = True
+
+            if is_ws and is_sticky == False:
                 is_sticky = True
 
             force_ssl = self._get_service_attr("force_ssl", service_alias)
