@@ -45,7 +45,7 @@ class Haproxy(object):
     const_cert_dir = "/certs/"
     const_cacert_dir = "/cacerts/"
     const_config_file = "/haproxy.cfg"
-    const_command = ['/usr/sbin/haproxy', '-f', const_config_file, '-db', '-q']
+    const_command = ['/usr/sbin/haproxy', '-f', const_config_file, '-db']
     const_api_retry = 10  # seconds
 
     # class var
