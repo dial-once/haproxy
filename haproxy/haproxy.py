@@ -418,6 +418,7 @@ class Haproxy(object):
 
                     # add websocket acl rule
                     frontends_dict[port].append("acl is_websocket hdr(Upgrade) -i WebSocket")
+                    frontends_dict[port].append("acl is_upgrade hdr(Connection) -i upgrade")
 
                     # add monitor uri
                     if port == Haproxy.envvar_monitor_port and Haproxy.envvar_monitor_uri:
@@ -451,7 +452,7 @@ class Haproxy(object):
                 acl_rule.extend(path_rules)
 
                 if vhost["scheme"].lower() in ["ws", "wss"]:
-                    acl_condition = "is_websocket"
+                    acl_condition = "is_websocket is_upgrade"
                 else:
                     acl_condition = ""
 
